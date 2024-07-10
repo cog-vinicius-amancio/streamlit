@@ -94,10 +94,12 @@ if st.button("Enviar"):
 
                     if response:
                         if len(response["products"]) > 0:
+                            st.text(response["products"][0]["productName"])
                             st.image(
                                 response["products"][0]["items"][0]["images"][0]["imageUrl"],
                                 width=100,
                             )
+                            st.text(response["products"][0]["description"])
                             break
 else:
     pass
