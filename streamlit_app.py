@@ -72,7 +72,7 @@ if st.button("Enviar"):
 
         if response:
             for product in response:
-                st.write(f"Nome: {product["VtexProduct"]["productName"]}")
+                st.write(f"Nome: {product['VtexProduct']['productName']}")
                 st.image(
                     product["VtexProduct"]["items"][0]["images"][0]["imageUrl"],
                     width=100,
