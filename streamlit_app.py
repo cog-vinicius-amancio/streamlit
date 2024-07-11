@@ -18,8 +18,6 @@ def request_api_fathers_day(
         "sizes": {"top-size": size},
     }
 
-    print(body)
-
     response = req.post(URL, json=body)
 
     try:
@@ -72,11 +70,14 @@ if st.button("Enviar"):
 
         if response:
             for product in response:
-                st.write(f"Nome: {product['VtexProduct']['productName']}")
+                st.write(f"**Nome**: {product['VtexProduct']['productName']}")
                 st.image(
                     product["VtexProduct"]["items"][0]["images"][0]["imageUrl"],
-                    width=100,
+                    width=200,
                 )
+                st.write(f"**Descrição**: {product['VtexProduct']['description']}")
+                st.write(f"**Preço**: R$ {product['VtexProduct']['items'][0]['sellers'][0]['commertialOffer']['Price']}")
+                st.write("---" * 50)
         else:
             st.write("Erro ao processar requisição")
     else:
