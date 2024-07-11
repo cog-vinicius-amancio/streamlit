@@ -76,7 +76,7 @@ if st.button("Enviar"):
             for look, values in response.items():
                 st.write(f"#### **Look {look[-1]}**")
                 for product in values:
-                    st.write(f"**Categoria:** {product["category"]}")
+                    st.write(f"**Categoria:** {product['category']}")
                     st.write(f"**Nome**: {product['VtexProduct']['productName']}")
                     st.image(
                         product["VtexProduct"]["items"][0]["images"][0]["imageUrl"],
