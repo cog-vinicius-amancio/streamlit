@@ -24,7 +24,8 @@ def request_api_fathers_day(
         return response.json()
     except req.JSONDecodeError:
         return None
-    
+
+
 def request_api_vtex(product_search: str):
     URL = "https://www.aramis.com.br/_v/api/intelligent-search/product_search/"
 
@@ -42,7 +43,9 @@ def request_api_vtex(product_search: str):
 
 st.title("Father's Day Quiz :necktie:")
 
-API_OR_MOCK = st.checkbox("Utilizar API", value=True)
+API_OR_MOCK = st.checkbox(
+    "Utilizar API (API ok! :white_check_mark:)", value=True, disabled=True
+)
 
 st.write("Selecione as opções:")
 
@@ -59,31 +62,39 @@ opcao3 = st.radio(
 opcao4 = st.radio("4. Acessórios fazem parte do estilo do seu pai?", ["Sim", "Não"])
 
 size = st.radio(
-    "5. Qual tamanho de roupa o seu pai usa?", ["P", "M", "G", "GG", "XGG", "XXG"]
+    "5. Qual tamanho de roupa o seu pai usa?", 
+    ["P", "M", "G", "GG", "XGG", "XXG"]
 )
 
 email = st.text_input("Digite o e-mail para receber desconto:")
 
 if st.button("Enviar"):
     if API_OR_MOCK:
-        response = request_api_fathers_day(opcao1, opcao2, opcao3, opcao4, size, email)
+        response: dict = request_api_fathers_day(opcao1, opcao2, opcao3, opcao4, size, email)
 
         if response:
-            for product in response:
-                st.write(f"**Nome**: {product['VtexProduct']['productName']}")
-                st.image(
-                    product["VtexProduct"]["items"][0]["images"][0]["imageUrl"],
-                    width=200,
-                )
-                st.write(f"**Descrição**: {product['VtexProduct']['description']}")
-                st.write(f"**Preço**: R$ {product['VtexProduct']['items'][0]['sellers'][0]['commertialOffer']['Price']}")
-                st.write("---" * 50)
+            for look, values in response.items():
+                st.write(f"#### **Look {look[-1]}**")
+                for product in values:
+                    st.write(f"**Categoria:** {product["category"]}")
+                    st.write(f"**Nome**: {product['VtexProduct']['productName']}")
+                    st.image(
+                        product["VtexProduct"]["items"][0]["images"][0]["imageUrl"],
+                        width=200,
+                    )
+                    st.write(f"**Descrição**: {product['VtexProduct']['description']}")
+                    st.write(
+                        f"**Preço**: R$ {product['VtexProduct']['items'][0]['sellers'][0]['commertialOffer']['Price']}"
+                    )
+                    st.write("---" * 50)
         else:
             st.write("Erro ao processar requisição")
     else:
         data_mock: dict = json.load(open("mock.json", "r"))
 
-        option = "-".join([unidecode(eval(f"opcao{i}").lower().replace(" ", "")) for i in range(1, 5)])
+        option = "-".join(
+            [unidecode(eval(f"opcao{i}").lower().replace(" ", "")) for i in range(1, 5)]
+        )
 
         classes = data_mock.get(option, [])
 
@@ -97,7 +108,9 @@ if st.button("Enviar"):
                         if len(response["products"]) > 0:
                             st.text(response["products"][0]["productName"])
                             st.image(
-                                response["products"][0]["items"][0]["images"][0]["imageUrl"],
+                                response["products"][0]["items"][0]["images"][0][
+                                    "imageUrl"
+                                ],
                                 width=100,
                             )
                             st.text(response["products"][0]["description"])
