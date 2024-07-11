@@ -9,6 +9,9 @@ def request_api_fathers_day(
 ):
     URL = "https://homolog-father-day-apimanagement.azure-api.net/api/v1/father_day"
 
+    if not email:
+        email = "@"
+        
     body = {
         "email": unidecode(email.lower()),
         "question1": unidecode(opcao1.lower()),
@@ -66,7 +69,7 @@ size = st.radio(
     ["P", "M", "G", "GG", "XGG", "XXG"]
 )
 
-email = st.text_input("Digite o e-mail para receber desconto:", value="")
+email = st.text_input("Digite o e-mail para receber desconto:")
 
 if st.button("Enviar"):
     if API_OR_MOCK:
