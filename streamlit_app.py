@@ -66,7 +66,7 @@ size = st.radio(
     ["P", "M", "G", "GG", "XGG", "XXG"]
 )
 
-email = st.text_input("Digite o e-mail para receber desconto:")
+email = st.text_input("Digite o e-mail para receber desconto:", value="")
 
 if st.button("Enviar"):
     if API_OR_MOCK:
