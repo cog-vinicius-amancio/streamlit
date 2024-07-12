@@ -11,7 +11,7 @@ def request_api_fathers_day(
 
     if not email:
         email = "@"
-        
+
     body = {
         "email": unidecode(email.lower()),
         "question1": unidecode(opcao1.lower()),
@@ -46,9 +46,16 @@ def request_api_vtex(product_search: str):
 
 st.title("Father's Day Quiz :necktie:")
 
-API_OR_MOCK = st.checkbox(
-    "Utilizar API (API ok! :white_check_mark:)", value=True, disabled=True
-)
+API_OR_MOCK = st.checkbox("Utilizar API (API ok! :white_check_mark:)", value=True)
+
+if not API_OR_MOCK:
+    # input para upload do arquivo
+    uploaded_file = st.file_uploader("Escolha o arquivo de dados", type="json")
+
+    if uploaded_file is not None:
+        data_mock = json.load(uploaded_file)
+    else:
+        st.error("Por favor, faça o upload do arquivo de dados")
 
 st.write("Selecione as opções:")
 
@@ -65,15 +72,16 @@ opcao3 = st.radio(
 opcao4 = st.radio("4. Acessórios fazem parte do estilo do seu pai?", ["Sim", "Não"])
 
 size = st.radio(
-    "5. Qual tamanho de roupa o seu pai usa?", 
-    ["P", "M", "G", "GG", "XGG", "XXG"]
+    "5. Qual tamanho de roupa o seu pai usa?", ["P", "M", "G", "GG", "XGG", "XXG"]
 )
 
 email = st.text_input("Digite o e-mail para receber desconto:")
 
 if st.button("Enviar"):
     if API_OR_MOCK:
-        response: dict = request_api_fathers_day(opcao1, opcao2, opcao3, opcao4, size, email)
+        response: dict = request_api_fathers_day(
+            opcao1, opcao2, opcao3, opcao4, size, email
+        )
 
         if response:
             for look, values in response.items():
@@ -93,8 +101,6 @@ if st.button("Enviar"):
         else:
             st.write("Erro ao processar requisição")
     else:
-        data_mock: dict = json.load(open("mock.json", "r"))
-
         option = "-".join(
             [unidecode(eval(f"opcao{i}").lower().replace(" ", "")) for i in range(1, 5)]
         )
@@ -102,21 +108,29 @@ if st.button("Enviar"):
         classes = data_mock.get(option, [])
 
         for cl, recs in classes.items():
-            st.write(f"Classe: {cl}")
+            st.write(f"**Classe: {cl}**")
             for part, rec in recs.items():
+                st.write(f"\n**Categoria: {part}**")
                 for product in [rec["master-item"]] + rec["secondary-items"]:
                     response = request_api_vtex(product)
 
                     if response:
                         if len(response["products"]) > 0:
-                            st.text(response["products"][0]["productName"])
+                            st.write(
+                                f"**Nome**: {response['products'][0]['productName']}"
+                            )
                             st.image(
                                 response["products"][0]["items"][0]["images"][0][
                                     "imageUrl"
                                 ],
-                                width=100,
+                                width=200,
                             )
-                            st.text(response["products"][0]["description"])
+                            st.write(response["products"][0]["description"])
+                            st.write(
+                                f"**Preço**: R$ {response['products'][0]['items'][0]['sellers'][0]['commertialOffer']['Price']}"
+                            )
                             break
+
+            st.write("---" * 50)
 else:
     pass

@@ -1,5 +1,5 @@
 {
-    "casualLAZER CLARO SIM": {
+    "casual-lazer-tonsclaros-sim": {
         "Classe A - ACIMA DE 20 SM": {
             "bottom-look": {
                 "master-item": "CL.35.0048|005",
@@ -201,7 +201,7 @@
             }
         }
     },
-    "casualLAZER ESCURO SIM": {
+    "casual-lazer-tonsescuros-sim": {
         "Classe A - ACIMA DE 20 SM": {
             "accessories": {
                 "master-item": "AC.03.0011|007",
@@ -467,7 +467,7 @@
             }
         }
     },
-    "casualTRABALHO CLARO SIM": {
+    "casual-trabalho-tonsclaros-sim": {
         "Classe A - ACIMA DE 20 SM": {
             "accessories": {
                 "master-item": "AC.09.0007|163",
@@ -629,7 +629,7 @@
             }
         }
     },
-    "casualTRABALHO ESCURO SIM": {
+    "casual-trabalho-tonsescuros-sim": {
         "Classe A - ACIMA DE 20 SM": {
             "accessories": {
                 "master-item": "AC.07.0143|007",
@@ -919,7 +919,7 @@
             }
         }
     },
-    "SOFISTICADO LAZER CLARO SIM": {
+    "sofisticado-lazer-tonsclaros-sim": {
         "Classe A - ACIMA DE 20 SM": {
             "accessories": {
                 "master-item": "AC.02.0003|163",
@@ -1129,7 +1129,7 @@
             }
         }
     },
-    "SOFISTICADO LAZER ESCURO SIM": {
+    "sofisticado-lazer-tonsescuros-sim": {
         "Classe A - ACIMA DE 20 SM": {
             "accessories": {
                 "master-item": "AC.03.0014|007",
@@ -1355,7 +1355,7 @@
             }
         }
     },
-    "SOFISTICADO TRABALHO CLARO SIM": {
+    "sofisticado-trabalho-tonsclaros-sim": {
         "Classe A - ACIMA DE 20 SM": {
             "accessories": {
                 "master-item": "AC.09.0007|163",
@@ -1485,7 +1485,7 @@
             }
         }
     },
-    "SOFISTICADO TRABALHO ESCURO SIM": {
+    "sofisticado-trabalho-tonsescuros-sim": {
         "Classe A - ACIMA DE 20 SM": {
             "bottom-look": {
                 "master-item": "CL.32.0046|184",
@@ -1695,7 +1695,7 @@
             }
         }
     },
-    "casualLAZER CLARO": {
+    "casual-lazer-tonsclaros-nao": {
         "Classe A - ACIMA DE 20 SM": {
             "bottom-look": {
                 "master-item": "CL.35.0048|005",
@@ -1897,7 +1897,7 @@
             }
         }
     },
-    "casualLAZER ESCURO": {
+    "casual-lazer-tonsescuros-nao": {
         "Classe A - ACIMA DE 20 SM": {
             "bottom-look": {
                 "master-item": "CJ.11.6145|126",
@@ -2147,7 +2147,7 @@
             }
         }
     },
-    "casualTRABALHO CLARO": {
+    "casual-trabalho-tonsclaros-nao": {
         "Classe A - ACIMA DE 20 SM": {
             "bottom-look": {
                 "master-item": "CF.06.0056|010",
@@ -2273,7 +2273,7 @@
             }
         }
     },
-    "casualTRABALHO ESCURO": {
+    "casual-trabalho-tonsescuros-nao": {
         "Classe A - ACIMA DE 20 SM": {
             "bottom-look": {
                 "master-item": "CF.06.0056|007",
@@ -2523,7 +2523,7 @@
             }
         }
     },
-    "SOFISTICADO LAZER CLARO": {
+    "sofisticado-lazer-tonsclaros-nao": {
         "Classe A - ACIMA DE 20 SM": {
             "bottom-look": {
                 "master-item": "CL.35.0048|046",
@@ -2693,7 +2693,7 @@
             }
         }
     },
-    "SOFISTICADO LAZER ESCURO": {
+    "sofisticado-lazer-tonsescuros-nao": {
         "Classe A - ACIMA DE 20 SM": {
             "bottom-look": {
                 "master-item": "CL.35.0069|010",
@@ -2903,7 +2903,7 @@
             }
         }
     },
-    "SOFISTICADO TRABALHO CLARO": {
+    "sofisticado-trabalho-tonsclaros-nao": {
         "Classe A - ACIMA DE 20 SM": {
             "bottom-look": {
                 "master-item": "CL.35.0048|027",
@@ -2993,7 +2993,7 @@
             }
         }
     },
-    "SOFISTICADO TRABALHO ESCURO": {
+    "sofisticado-trabalho-tonsescuros-nao": {
         "Classe A - ACIMA DE 20 SM": {
             "bottom-look": {
                 "master-item": "CL.32.0046|184",
