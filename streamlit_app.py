@@ -112,7 +112,11 @@ if st.button("Enviar"):
             for part, rec in recs.items():
                 st.write(f"\n**Categoria: {part}**")
                 for product in [rec["master-item"]] + rec["secondary-items"]:
-                    response = request_api_vtex(product)
+                    while True:
+                        response = request_api_vtex(product)
+
+                        if response and response["products"][0]["productReference"] == product:
+                            break
 
                     if response:
                         if len(response["products"]) > 0:
