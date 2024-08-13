@@ -5,9 +5,15 @@ import json
 
 
 def request_api_fathers_day(
-    opcao1: str, opcao2: str, opcao3: str, opcao4: str, size: str, email: str, endpoint: str = "father_day"
+    opcao1: str,
+    opcao2: str,
+    opcao3: str,
+    opcao4: str,
+    size: str,
+    email: str,
+    endpoint: str = "father_day",
 ):
-    URL = f"https://homolog-father-day-apimanagement.azure-api.net/api/v1/{endpoint}"
+    URL = f"http://localhost:7071/api/{endpoint}"
 
     if not email:
         email = "@"
@@ -43,6 +49,7 @@ def request_api_vtex(product_search: str):
     except req.JSONDecodeError:
         return None
 
+
 def options_quiz():
     st.write("Selecione as opções:")
 
@@ -53,7 +60,8 @@ def options_quiz():
     opcao2 = st.radio("2. Qual a ocasião de uso?", ["Trabalho", "Lazer"])
 
     opcao3 = st.radio(
-        "3. Quais cores predominam nas roupas do seu pai?", ["Tons Claros", "Tons Escuros"]
+        "3. Quais cores predominam nas roupas do seu pai?",
+        ["Tons Claros", "Tons Escuros"],
     )
 
     opcao4 = st.radio("4. Acessórios fazem parte do estilo do seu pai?", ["Sim", "Não"])
@@ -108,7 +116,7 @@ else:
         else:
             st.error("Por favor, faça o upload do arquivo de dados")
 
-    opcao1, opcao2, opcao3, opcao4, size, email = options_quiz()    
+    opcao1, opcao2, opcao3, opcao4, size, email = options_quiz()
 
     if st.button("Enviar"):
         if API_OR_MOCK:
@@ -126,7 +134,9 @@ else:
                             product["VtexProduct"]["items"][0]["images"][0]["imageUrl"],
                             width=200,
                         )
-                        st.write(f"**Descrição**: {product['VtexProduct']['description']}")
+                        st.write(
+                            f"**Descrição**: {product['VtexProduct']['description']}"
+                        )
                         st.write(
                             f"**Preço**: R$ {product['VtexProduct']['items'][0]['sellers'][0]['commertialOffer']['Price']}"
                         )
@@ -135,7 +145,10 @@ else:
                 st.write("Erro ao processar requisição")
         else:
             option = "-".join(
-                [unidecode(eval(f"opcao{i}").lower().replace(" ", "")) for i in range(1, 5)]
+                [
+                    unidecode(eval(f"opcao{i}").lower().replace(" ", ""))
+                    for i in range(1, 5)
+                ]
             )
 
             classes = data_mock.get(option, [])
@@ -148,7 +161,11 @@ else:
                         response = request_api_vtex(product)
 
                         if response:
-                            if len(response["products"]) > 0 and response["products"][0]["productReference"] == product:
+                            if (
+                                len(response["products"]) > 0
+                                and response["products"][0]["productReference"]
+                                == product
+                            ):
                                 st.write(
                                     f"**Nome**: {response['products'][0]['productName']}"
                                 )
