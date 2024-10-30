@@ -2,7 +2,7 @@ import streamlit as st
 
 from pages.fathes_days_page.fathers_days import fathers_day
 from pages.alr_test_ab.validation_recs_alt_test_ab import model_alr
-from pages.test_api.test_api import test_api
+from pages.test_api.test_api_recommendations import search_recommendations
 
 st.set_page_config(
     page_title="Aramis Testing Pages",
@@ -13,7 +13,7 @@ st.set_page_config(
 PAGES = {
     "Dia dos Pais": fathers_day,
     "Modelo ALR - Teste A/B": model_alr,
-    "Teste API Recomendação": test_api
+    "Teste API Recomendação": search_recommendations
 }
 
 st.sidebar.title("Menu")
