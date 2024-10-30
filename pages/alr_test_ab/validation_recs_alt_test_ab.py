@@ -5,7 +5,7 @@ from pages.fathes_days_page.fathers_days import request_api_vtex
 
 
 def model_alr():
-    st.write("Modelo ALR - Teste A/B")
+    st.title("Modelo ALR - Teste A/B")
 
     model_type = st.sidebar.selectbox(
         "Modelo",
