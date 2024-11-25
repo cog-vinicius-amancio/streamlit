@@ -49,7 +49,7 @@ def request_images(row,num_recs):
 def validation_recs():
 
     st.title("Página de validação de recomendações")
-    df = pd.read_csv(PAGE_URL+'rec.csv')
+    df = pd.read_csv(PAGE_URL+'recs.csv')
 
     if not df.empty:
         st.write("Selecione linhas do CSV contendo os produtos, para obter as imagens das recomendações:")
