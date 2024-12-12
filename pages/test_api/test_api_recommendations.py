@@ -21,6 +21,10 @@ MAPPER_ENDPOINTS = {
     "Você Pode Gostar - B": {
         "url": f"{BASE_URL}/voce-pode-gostar-testeb",
         "key": "product"
+    },
+    "Produto Indisponível": {
+        "url": f"{BASE_URL}/produto-indisponivel",
+        "key": "product"
     }
 }
 
@@ -58,7 +62,7 @@ def search_recommendations():
 
     option = st.selectbox(
         "Escolha qual endpoint deseja testar",
-        ["Aramis Recomenda", "Aproveite e Leve Junto", "Você Pode Gostar", "Você Pode Gostar - B"],
+        ["Aramis Recomenda", "Aproveite e Leve Junto", "Você Pode Gostar", "Você Pode Gostar - B", "Produto Indisponível"],
         index=None
     )
 
