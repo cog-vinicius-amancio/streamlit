@@ -106,14 +106,6 @@ def validation_recs():
         
         page_df = itens_pai_df.iloc[start_idx:end_idx]
 
-        event = st.dataframe(
-            page_df,
-            use_container_width=True,
-            on_select="rerun",
-            hide_index=True,
-            selection_mode="multi-row"
-        )
-
         grupos_filtro_info = itens_pai_df['ds_grupo'].unique()
         subgrupo_filtro_info = itens_pai_df['ds_subgrupo'].unique()
         cor_filtro_info = itens_pai_df['ds_cor'].unique()
@@ -121,12 +113,41 @@ def validation_recs():
         modelagem_filtro_info = itens_pai_df['ds_modelagem'].unique()
         composicao_filtro_info = itens_pai_df['ds_composicao'].unique()
 
-        st.selectbox(grupos_filtro_info)
-        st.selectbox(subgrupo_filtro_info)
-        st.selectbox(cor_filtro_info)
-        st.selectbox(cor_predominante_filtro_info)
-        st.selectbox(modelagem_filtro_info)
-        st.selectbox(composicao_filtro_info)
+        st.write("### Filtros para o CSV:")
+        grupo_select = st.selectbox("Grupo: ",grupos_filtro_info,index=None)
+        subgrupo_select = st.selectbox("Subgrupo: ",subgrupo_filtro_info,index=None)
+        cor_select = st.selectbox("Cor: ",cor_filtro_info,index=None)
+        cor_predominante_select = st.selectbox("Cor Predominante: ",cor_predominante_filtro_info,index=None)
+        modelagem_select = st.selectbox("Modelagem: ",modelagem_filtro_info,index=None)
+        composicao_select = st.selectbox("Composição: ",composicao_filtro_info,index=None)
+
+        filtered_page_df = page_df.copy()
+
+        if grupo_select:
+            filtered_page_df = filtered_page_df[filtered_page_df['ds_grupo'] == grupo_select]
+
+        if subgrupo_select:
+            filtered_page_df = filtered_page_df[filtered_page_df['ds_subgrupo'] == subgrupo_select]
+
+        if cor_select:
+            filtered_page_df = filtered_page_df[filtered_page_df['ds_cor'] == cor_select]
+
+        if cor_predominante_select:
+            filtered_page_df = filtered_page_df[filtered_page_df['ds_cor_predominante'] == cor_predominante_select]
+
+        if modelagem_select:
+            filtered_page_df = filtered_page_df[filtered_page_df['ds_modelagem'] == modelagem_select]
+
+        if composicao_select:
+            filtered_page_df = filtered_page_df[filtered_page_df['ds_composicao'] == composicao_select]
+
+        event = st.dataframe(
+            filtered_page_df,
+            use_container_width=True,
+            on_select="rerun",
+            hide_index=True,
+            selection_mode="multi-row",
+        )
 
         #if api_or_csv == "API":
         #    key = st.selectbox(
@@ -164,12 +185,12 @@ def validation_recs():
         #         st.warning("Selecione um produto para continuar")
         # else:
 
-        st.write("Produtos selecionados:")
+        st.write("### Produtos selecionados:")
         selected_rows = event.selection.rows
-        filtered_page_df = page_df.iloc[selected_rows]
+        page_selected_rows_df = filtered_page_df.iloc[selected_rows]
 
         st.dataframe(
-            filtered_page_df,
+            page_selected_rows_df,
             use_container_width=True,
             hide_index=True
         )
@@ -178,7 +199,7 @@ def validation_recs():
 
         if st.button("Buscar recomendações"):
             with st.spinner("Buscando recomendações..."):
-                if not filtered_page_df.empty:
-                    filtered_page_df.apply(lambda row: request_images(row, num_recs), axis=1)
+                if not page_selected_rows_df.empty:
+                    page_selected_rows_df.apply(lambda row: request_images(row, num_recs), axis=1)
                 else:
                     st.write("Selecione algum produto.")
