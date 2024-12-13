@@ -49,7 +49,7 @@ produtos_df.set_index('cd_prod_cor', inplace=True)
 
 itens_pai_df = optimize_dataframe(pd.read_csv(PAGE_URL+'itens_pai_recs.csv'))
 recommendations_dict = itens_pai_df.set_index("cd_prod_cor")["recs"].to_dict()
-itens_pai_df = itens_pai_df.drop(columns=["recs"])
+itens_pai_df = itens_pai_df.drop(columns=["recs","IsActive","IsBrandActive","IsProductActive","tem_imagem?"])
 
 def process_row(row,num_recs):
     cd_prod_cor = row['cd_prod_cor']
