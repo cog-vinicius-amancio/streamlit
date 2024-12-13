@@ -13,6 +13,22 @@ PAGE_URL = 'pages/validation_recs_page/'
 def string_to_list(string: str) -> List:
     return json.loads(string)
 
+def optimize_dataframe(df):
+    for col in df.columns:
+        col_type = df[col].dtype
+
+        if col_type == 'object':
+            num_unique_values = df[col].nunique()
+            num_total_values = len(df[col])
+            if num_unique_values / num_total_values < 0.5:
+                df[col] = df[col].astype('category')
+        elif col_type.name.startswith('int'):
+            df[col] = pd.to_numeric(df[col], downcast='integer')
+        elif col_type.name.startswith('float'):
+            df[col] = pd.to_numeric(df[col], downcast='float')
+
+    return df
+
 def request_image(product_reference: str):
     URL = "https://aramisnova.myvtex.com/_v/api/intelligent-search/product_search/?query="
     #product_reference_formated = product_reference.replace("|","")
@@ -28,14 +44,18 @@ def request_image(product_reference: str):
     else:
         return None
 
-def request_images(row,num_recs):
+@st.cache_data 
+def cached_request_image(product_id):
+    return request_image(product_id)
 
-    produtos_df = pd.read_csv(PAGE_URL+'produtos_infos.csv')
-    produtos_df.set_index('cd_prod_cor', inplace=True)
+produtos_df = optimize_dataframe(pd.read_csv(PAGE_URL+'produtos_infos.csv'))
+produtos_df.set_index('cd_prod_cor', inplace=True)
+
+def process_row(row,num_recs):
 
     cd_prod_cor = row['cd_prod_cor']
     st.subheader(f"Imagem do produto {cd_prod_cor}:")
-    image_url = request_image(cd_prod_cor)
+    image_url = cached_request_image(cd_prod_cor)
 
     col1, col2 = st.columns([1, 2])
     
@@ -89,7 +109,7 @@ def validation_recs():
     #    "API ou CSV", ["API", "CSV"], index=0
     #)
 
-    itens_pai_df = pd.read_csv(PAGE_URL+'itens_pai_recs.csv')
+    itens_pai_df = optimize_dataframe(pd.read_csv(PAGE_URL+'itens_pai_recs.csv'))
 
     if not itens_pai_df.empty:
         st.write("Selecione a página e linhas do CSV contendo os produtos, para obter as imagens das recomendações:")
@@ -122,25 +142,20 @@ def validation_recs():
         modelagem_select = st.selectbox("Modelagem: ",modelagem_filtro_info,index=None)
         composicao_select = st.selectbox("Composição: ",composicao_filtro_info,index=None)
 
+        filters = {
+            'ds_grupo': grupo_select,
+            'ds_subgrupo': subgrupo_select,
+            'ds_cor': cor_select,
+            'ds_cor_predominante': cor_predominante_select,
+            'ds_modelagem': modelagem_select,
+            'ds_composicao': composicao_select,
+        }
+
         filtered_page_df = page_df.copy()
 
-        if grupo_select:
-            filtered_page_df = filtered_page_df[filtered_page_df['ds_grupo'] == grupo_select]
-
-        if subgrupo_select:
-            filtered_page_df = filtered_page_df[filtered_page_df['ds_subgrupo'] == subgrupo_select]
-
-        if cor_select:
-            filtered_page_df = filtered_page_df[filtered_page_df['ds_cor'] == cor_select]
-
-        if cor_predominante_select:
-            filtered_page_df = filtered_page_df[filtered_page_df['ds_cor_predominante'] == cor_predominante_select]
-
-        if modelagem_select:
-            filtered_page_df = filtered_page_df[filtered_page_df['ds_modelagem'] == modelagem_select]
-
-        if composicao_select:
-            filtered_page_df = filtered_page_df[filtered_page_df['ds_composicao'] == composicao_select]
+        for column, value in filters.items():
+            if value:
+                filtered_page_df = filtered_page_df[filtered_page_df[column] == value]
 
         event = st.dataframe(
             filtered_page_df,
@@ -201,6 +216,7 @@ def validation_recs():
         if st.button("Buscar recomendações"):
             with st.spinner("Buscando recomendações..."):
                 if not page_selected_rows_df.empty:
-                    page_selected_rows_df.apply(lambda row: request_images(row, num_recs), axis=1)
+                    for _, row in page_selected_rows_df.iterrows():
+                        process_row(row, num_recs)
                 else:
                     st.write("Selecione algum produto.")
