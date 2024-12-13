@@ -1,12 +1,9 @@
 import streamlit as st
 import pandas as pd
-#from pages.fathes_days_page.fathers_days import request_api_vtex
 from typing import List
-#from pages.test_api.test_api_recommendations import BASE_URL, MAPPER_ENDPOINTS
-#from pages.test_api.test_api_recommendations import request_api, process_json
-
 import json
 import requests as req
+from time import sleep
 
 PAGE_URL = 'pages/validation_recs_page/'
 
@@ -31,7 +28,6 @@ def optimize_dataframe(df):
 
 def request_image(product_reference: str):
     URL = "https://aramisnova.myvtex.com/_v/api/intelligent-search/product_search/?query="
-    #product_reference_formated = product_reference.replace("|","")
 
     response = req.get(URL+product_reference)
     if response.status_code == 200:
@@ -51,8 +47,11 @@ def cached_request_image(product_id):
 produtos_df = optimize_dataframe(pd.read_csv(PAGE_URL+'produtos_infos.csv'))
 produtos_df.set_index('cd_prod_cor', inplace=True)
 
-def process_row(row,num_recs):
+itens_pai_df = optimize_dataframe(pd.read_csv(PAGE_URL+'itens_pai_recs.csv'))
+recommendations_dict = itens_pai_df.set_index("cd_prod_cor")["recs"].to_dict()
+itens_pai_df = itens_pai_df.drop(columns=["recs"])
 
+def process_row(row,num_recs):
     cd_prod_cor = row['cd_prod_cor']
     st.subheader(f"Imagem do produto {cd_prod_cor}:")
     image_url = cached_request_image(cd_prod_cor)
@@ -75,7 +74,7 @@ def process_row(row,num_recs):
         st.write(f"**Composição:** {row['ds_composicao']}")
 
     st.subheader(f"As imagens das {num_recs} primeiras recomendações (que foram encontradas imagens) para o produto {row['cd_prod_cor']}:")
-    recs_list = string_to_list(row['recs'])
+    recs_list = string_to_list(recommendations_dict[cd_prod_cor])
     count_images_showed = 1
     for rec in recs_list:
         rec_infos = produtos_df.loc[rec['productId']]
@@ -104,12 +103,6 @@ def process_row(row,num_recs):
 def validation_recs():
 
     st.title("Página de validação de recomendações")
-
-    #api_or_csv = st.selectbox(
-    #    "API ou CSV", ["API", "CSV"], index=0
-    #)
-
-    itens_pai_df = optimize_dataframe(pd.read_csv(PAGE_URL+'itens_pai_recs.csv'))
 
     if not itens_pai_df.empty:
         st.write("Selecione a página e linhas do CSV contendo os produtos, para obter as imagens das recomendações:")
@@ -164,42 +157,6 @@ def validation_recs():
             hide_index=True,
             selection_mode="multi-row",
         )
-
-        #if api_or_csv == "API":
-        #    key = st.selectbox(
-        #        "Selecione o produto para pesquisar",
-        #        df["cd_prod_cor"].unique(),
-        #        index=None
-        #    )
-
-        #     if key:
-        #         st.subheader(f"Imagem do produto {key}:")
-        #         image_url = request_image(key)
-        #         if image_url:
-        #             st.image(image_url, width=300)
-        #         else:
-        #             st.write("Imagem não encontrada.")
-        #         st.subheader(f"As imagens das recomendações para o produto {key}:")
-
-        #         with st.spinner("Buscando recomendações..."):
-        #             response, success = request_api("Produto Indisponível", key)
-
-        #             if success:
-        #                 products = process_json(response)
-
-        #                 for product in products:
-        #                     st.write(f"**ID:** {product['id']}")
-        #                     st.write(f"**Nome:** {product['name']}")
-        #                     st.image(product["image"], width=300)
-        #                     st.write(f"**Link:** {product['link']}")
-        #                     st.write(f"**Preço de:** R$ {product['price_per']}")
-        #                     st.write(f"**Preço por:** R$ {product['price_of']}")
-        #                     st.write("---")
-        #             else:
-        #                 st.error(response)
-        #     else:
-        #         st.warning("Selecione um produto para continuar")
-        # else:
 
         st.write("### Produtos selecionados:")
         selected_rows = event.selection.rows
