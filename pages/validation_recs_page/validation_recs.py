@@ -195,8 +195,8 @@ def validation_recs():
             use_container_width=True,
             hide_index=True
         )
-                with st.spinner("Buscando recomendações..."):
-                    response, success = request_api("Produto Indisponível", key)
+
+        num_recs = st.number_input('Número de recomendações que serão exibidas para cada produto selecionado:', min_value=1, value=5, step=1)
 
         if st.button("Buscar recomendações"):
             with st.spinner("Buscando recomendações..."):
