@@ -4,6 +4,7 @@ import pandas as pd
 from typing import List
 #from pages.test_api.test_api_recommendations import BASE_URL, MAPPER_ENDPOINTS
 #from pages.test_api.test_api_recommendations import request_api, process_json
+
 import json
 import requests as req
 
@@ -194,8 +195,8 @@ def validation_recs():
             use_container_width=True,
             hide_index=True
         )
-
-        num_recs = st.number_input('Número de recomendações que serão exibidas para cada produto selecionado:', min_value=1, value=5, step=1)
+                with st.spinner("Buscando recomendações..."):
+                    response, success = request_api("Produto Indisponível", key)
 
         if st.button("Buscar recomendações"):
             with st.spinner("Buscando recomendações..."):
